@@ -16,16 +16,22 @@ type Config struct {
 }
 
 func LoadConfig() Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️ Warning: .env file not found, using system env vars")
 	}
 
-	return Config{
+	cfg := Config{
 		DBHost:     os.Getenv("DB_HOST"),
 		DBPort:     os.Getenv("DB_PORT"),
 		DBUser:     os.Getenv("DB_USER"),
 		DBPassword: os.Getenv("DB_PASSWORD"),
 		DBName:     os.Getenv("DB_NAME"),
 	}
+
+	// Fail hard only if config vars are missing
+	if cfg.DBHost == "" || cfg.DBUser == "" || cfg.DBName == "" {
+		log.Fatal("❌ Required environment variables are missing")
+	}
+
+	return cfg
 }
