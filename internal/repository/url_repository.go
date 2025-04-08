@@ -9,6 +9,7 @@ type URLRepository interface {
 	CreateURL(url *model.URL) error
 	GetBySlug(slug string) (*model.URL, error)
 	LogClick(click *model.Click) error
+	GetClicksBySlug(slug string) ([]model.Click, error)
 }
 
 type urlRepo struct {
@@ -31,4 +32,10 @@ func (r *urlRepo) GetBySlug(slug string) (*model.URL, error) {
 
 func (r *urlRepo) LogClick(click *model.Click) error {
 	return r.db.Create(click).Error
+}
+
+func (r *urlRepo) GetClicksBySlug(slug string) ([]model.Click, error) {
+	var clicks []model.Click
+	err := r.db.Where("slug = ?", slug).Order("timestamp desc").Find(&clicks).Error
+	return clicks, err
 }

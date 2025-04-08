@@ -52,3 +52,7 @@ func (s *URLService) Resolve(slug, userAgent string) (string, error) {
 
 	return url.Original, nil
 }
+
+func (s *URLService) GetClickAnalytics(slug string) ([]model.Click, error) {
+	return s.repo.GetClicksBySlug(slug)
+}

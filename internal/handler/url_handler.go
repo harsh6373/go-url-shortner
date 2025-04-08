@@ -57,3 +57,14 @@ func (h *URLHandler) Redirect(c *fiber.Ctx) error {
 
 	return c.Redirect(original, fiber.StatusMovedPermanently)
 }
+
+func (h *URLHandler) GetAnalytics(c *fiber.Ctx) error {
+	slug := c.Params("slug")
+
+	clicks, err := h.service.GetClickAnalytics(slug)
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(clicks)
+}

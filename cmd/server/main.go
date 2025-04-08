@@ -35,6 +35,7 @@ func main() {
 
 	app.Post("/api/shorten", urlHandler.Shorten)
 	app.Get("/:slug", urlHandler.Redirect)
+	app.Get("/api/analytics/:slug", urlHandler.GetAnalytics)
 
 	log.Println("Server running at http://localhost:3000")
 	log.Fatal(app.Listen(":3000"))
